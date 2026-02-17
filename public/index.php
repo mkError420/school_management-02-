@@ -54,6 +54,26 @@ if ($uri === '') {
     require_once APP_PATH . '/controllers/AuthController.php';
     $controller = new AuthController();
     $controller->showLogin();
+} elseif ($uri === 'admin' || $uri === 'admin/dashboard') {
+    // Admin dashboard
+    require_once APP_PATH . '/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->dashboard();
+} elseif ($uri === 'admin/dashboard') {
+    // Admin dashboard (alternative route)
+    require_once APP_PATH . '/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->dashboard();
+} elseif ($uri === 'teacher' || $uri === 'teacher/dashboard') {
+    // Teacher dashboard
+    require_once APP_PATH . '/controllers/TeacherController.php';
+    $controller = new TeacherController();
+    $controller->dashboard();
+} elseif ($uri === 'student' || $uri === 'student/dashboard') {
+    // Student dashboard
+    require_once APP_PATH . '/controllers/StudentController.php';
+    $controller = new StudentController();
+    $controller->dashboard();
 } else {
     // Handle other routes
     echo "<h1>404 - Page Not Found</h1>";
