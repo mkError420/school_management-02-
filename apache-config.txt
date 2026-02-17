@@ -1,0 +1,21 @@
+# Apache Configuration Instructions
+
+# Option 1: Update DocumentRoot in httpd.conf
+# Find this line in C:\xampp\apache\conf\httpd.conf:
+# DocumentRoot "C:/xampp/htdocs"
+# Change to:
+# DocumentRoot "C:/xampp/htdocs/School management/public"
+
+# Option 2: Add Virtual Host
+# Add this to C:\xampp\apache\conf\extra\httpd-vhosts.conf:
+# <VirtualHost *:80>
+#     DocumentRoot "C:/xampp/htdocs/School management/public"
+#     ServerName school.local
+#     <Directory "C:/xampp/htdocs/School management/public">
+#         Options Indexes FollowSymLinks
+#         AllowOverride All
+#         Require all granted
+#     </Directory>
+# </VirtualHost>
+
+# After making changes, restart Apache
