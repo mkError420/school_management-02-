@@ -14,6 +14,9 @@
     <!-- Custom CSS -->
     <link href="<?php echo PUBLIC_PATH; ?>/assets/css/main.css" rel="stylesheet">
     
+    <!-- Admin Dashboard CSS -->
+    <link href="<?php echo PUBLIC_PATH; ?>/assets/css/admin-dashboard.css" rel="stylesheet">
+    
     <!-- Dark Mode CSS -->
     <link href="<?php echo PUBLIC_PATH; ?>/assets/css/dark-mode.css" rel="stylesheet" id="dark-mode-css">
     
