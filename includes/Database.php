@@ -197,7 +197,17 @@ class QueryBuilder {
             $operator = '=';
         }
         
-        $this->query .= " OR $column $operator ?";
+        // Initialize query if empty
+        if (empty($this->query)) {
+            $this->query = "SELECT * FROM {$this->table}";
+        }
+        
+        // If no WHERE clause exists, add WHERE instead of OR
+        if (strpos($this->query, 'WHERE') === false) {
+            $this->query .= " WHERE $column $operator ?";
+        } else {
+            $this->query .= " OR $column $operator ?";
+        }
         $this->bindings[] = $value;
         
         return $this;
@@ -308,10 +318,22 @@ class QueryBuilder {
      * @return array
      */
     public function get() {
-        $this->execute();
-        $stmt = $this->pdo->prepare($this->query);
-        $stmt->execute($this->bindings);
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        // If no query is set, create a basic select query
+        if (empty($this->query)) {
+            $this->query = "SELECT * FROM {$this->table}";
+        }
+        
+        try {
+            $stmt = $this->pdo->prepare($this->query);
+            $stmt->execute($this->bindings);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            if (APP_ENV === 'development') {
+                die("Query failed: " . $e->getMessage());
+            } else {
+                return [];
+            }
+        }
     }
     
     /**
@@ -319,10 +341,22 @@ class QueryBuilder {
      * @return object|null
      */
     public function first() {
-        $this->execute();
-        $stmt = $this->pdo->prepare($this->query);
-        $stmt->execute($this->bindings);
-        return $stmt->fetch(PDO::FETCH_OBJ);
+        // If no query is set, create a basic select query
+        if (empty($this->query)) {
+            $this->query = "SELECT * FROM {$this->table}";
+        }
+        
+        try {
+            $stmt = $this->pdo->prepare($this->query);
+            $stmt->execute($this->bindings);
+            return $stmt->fetch(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            if (APP_ENV === 'development') {
+                die("Query failed: " . $e->getMessage());
+            } else {
+                return null;
+            }
+        }
     }
     
     /**
@@ -330,10 +364,22 @@ class QueryBuilder {
      * @return int
      */
     public function count() {
-        $this->execute();
-        $stmt = $this->pdo->prepare($this->query);
-        $stmt->execute($this->bindings);
-        return $stmt->rowCount();
+        // If no query is set, create a basic count query
+        if (empty($this->query)) {
+            $this->query = "SELECT * FROM {$this->table}";
+        }
+        
+        try {
+            $stmt = $this->pdo->prepare($this->query);
+            $stmt->execute($this->bindings);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            if (APP_ENV === 'development') {
+                die("Query failed: " . $e->getMessage());
+            } else {
+                return 0;
+            }
+        }
     }
     
     /**

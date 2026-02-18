@@ -34,14 +34,14 @@ class AuthController {
      */
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            redirect('login');
+            redirect('/School management/public/login');
             return;
         }
         
         // Validate CSRF token
         if (!validateCSRFToken($_POST['csrf_token'] ?? '')) {
             $this->session->setFlash('Invalid request!', 'error');
-            redirect('login');
+            redirect('/School management/public/login');
             return;
         }
         
@@ -53,7 +53,7 @@ class AuthController {
         // Validate input
         if (empty($username) || empty($password)) {
             $this->session->setFlash('Please enter username and password!', 'error');
-            redirect('login');
+            redirect('/School management/public/login');
             return;
         }
         
@@ -62,14 +62,14 @@ class AuthController {
         
         if (!$user || !$this->userModel->verifyPassword($password, $user->password)) {
             $this->session->setFlash('Invalid username or password!', 'error');
-            redirect('login');
+            redirect('/School management/public/login');
             return;
         }
         
         // Check if user is active
         if ($user->status !== STATUS_ACTIVE) {
             $this->session->setFlash('Your account is inactive. Please contact administrator!', 'error');
-            redirect('login');
+            redirect('/School management/public/login');
             return;
         }
         
@@ -77,7 +77,8 @@ class AuthController {
         $this->session->login($user, $remember);
         
         // Update last login
-        $this->userModel->updateLastLogin($user->id);
+        // Temporarily disabled to isolate SQL parameter error
+        // $this->userModel->updateLastLogin($user->id);
         
         // Redirect to dashboard
         $this->redirectToDashboard();
@@ -89,7 +90,7 @@ class AuthController {
     public function logout() {
         $this->session->logout();
         $this->session->setFlash('You have been logged out successfully!', 'success');
-        redirect('login');
+        redirect('/School management/public/login');
     }
     
     /**

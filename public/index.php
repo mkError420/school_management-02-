@@ -36,6 +36,9 @@ foreach ($basePaths as $basePath) {
     }
 }
 
+// Also handle encoded space in URI
+$uri = str_replace('School%20management', 'School management', $uri);
+
 $uri = trim($uri, '/');
 
 // Simple routing
@@ -74,6 +77,11 @@ if ($uri === '') {
     require_once APP_PATH . '/controllers/StudentController.php';
     $controller = new StudentController();
     $controller->dashboard();
+} elseif ($uri === 'logout') {
+    // Handle logout
+    require_once APP_PATH . '/controllers/AuthController.php';
+    $controller = new AuthController();
+    $controller->logout();
 } else {
     // Handle other routes
     echo "<h1>404 - Page Not Found</h1>";
